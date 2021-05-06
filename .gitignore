@@ -1,0 +1,15 @@
+auto
+*.log
+*.toc
+*.aux
+*.out
+rpz*.pdf
+*.bbl
+*.blg
+*.eps
+.deps
+tex/inc
+tex/_minted-report
+.idea
+*.bak
+notes.txt

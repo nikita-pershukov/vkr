@@ -1,0 +1,48 @@
+% style etc
+\documentclass[utf8x, 14pt]{G7-32} % Стиль (по умолчанию будет 14pt)
+
+% other settings
+\include{0-preamble}
+
+\begin{document}
+
+% disable counters
+\frontmatter
+\pagenumbering{gobble}
+
+\include{0-1-title-page}
+\include{0-2-task}
+\include{0-3-timeline}
+\include{0-4-abstract}
+
+\pagenumbering{arabic}
+
+\setcounter{page}{2}
+\tableofcontents
+\clearpage
+
+\include{0-5-intro}
+\include{0-6-terms}
+
+% enable counters
+\mainmatter
+\nodotsforchapters
+
+% begin main part
+
+\include{1-0-theory}
+
+\include{2-0-practice}
+
+% end main part
+
+\backmatter
+
+\include{10-0-conclusion}
+
+\include{11-0-biblio}
+
+\nobreakingbeforechapters
+\include{12-0-appendix}
+
+\end{document}

@@ -1,0 +1,88 @@
+\sloppy
+
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+
+% Настройки стиля ГОСТ 7-32
+% Для начала определяем, хотим мы или нет, чтобы рисунки и таблицы нумеровались в пределах раздела, или нам нужна сквозная нумерация.
+%\EqInChapter % формулы будут нумероваться в пределах раздела
+%\TableInChapter % таблицы будут нумероваться в пределах раздела
+%\PicInChapter % рисунки будут нумероваться в пределах раздела
+
+\usepackage[tableposition=top]{caption}
+\usepackage{subcaption}
+\DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}
+\DeclareCaptionLabelFormat{gosttable}{Таблица #2}
+\DeclareCaptionLabelFormat{gostlisting}{Листинг #2}
+\DeclareCaptionLabelSeparator{gost}{~---~}
+\captionsetup{labelsep=gost}
+\captionsetup[figure]{labelformat=gostfigure}
+\captionsetup[table]{labelformat=gosttable}
+\captionsetup[listing]{labelformat=gostlisting}
+\renewcommand{\thesubfigure}{\asbuk{subfigure}}
+
+% Добавляем гипертекстовое оглавление в PDF
+\usepackage[
+bookmarks=true, colorlinks=true, unicode=true,
+urlcolor=black,linkcolor=black, anchorcolor=black,
+citecolor=black, menucolor=black, filecolor=black,
+]{hyperref}
+
+% Изменение начертания шрифта --- после чего выглядит таймсоподобно.
+% apt-get install scalable-cyrfonts-tex
+
+\IfFileExists{cyrtimes.sty}
+    {
+        \usepackage{cyrtimespatched}
+    }
+    {
+        % Если нет Times
+    }
+
+\usepackage{graphicx} % Пакет для включения рисунков
+\DeclareGraphicsExtensions{.jpg,.pdf,.png}
+% \RequirePackage[left=20mm,right=10mm,top=20mm,bottom=20mm,headsep=0pt]{geometry}
+\geometry{right=20mm}
+\geometry{left=30mm}
+
+\usepackage{afterpage}
+
+\usepackage{url}
+\usepackage{tabularx}
+
+% Произвольная нумерация списков.
+\usepackage{enumerate}
+
+% Мультиколонки
+\usepackage{multicol}
+
+% Исходный код
+\usepackage[all]{hypcap}
+\usepackage{listings}
+\usepackage[newfloat]{minted}
+
+\setcounter{tocdepth}{2} %Подробность оглавления
+%4 это chapter, section, subsection, subsubsection и paragraph
+%3 это chapter, section, subsection и subsubsection
+%2 это chapter, section, и subsection
+%1 это chapter и section
+%0 это chapter.
+
+\usepackage{totcount}
+\regtotcounter{chapter}
+\regtotcounter{table}
+\regtotcounter{listing}
+\regtotcounter{figure}
+
+\newtotcounter{citenum}
+
+\def\oldbibitem{} \let\oldbibitem=\bibitem
+\def\bibitem{\stepcounter{citenum}\oldbibitem}
+
+\usepackage{lastpage}
+
+%\makeatletter
+%\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname \quad}
+%\makeatother
