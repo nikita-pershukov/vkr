@@ -1,4 +1,4 @@
-% This package designed and commented in russian utf-8 encoding.
+% This package designed and commented in Russian (utf-8 encoding).
 %
 % Лицензия GNU GPL v2 и совместимые
 %
@@ -8,172 +8,481 @@
 % Дальнейшая разработка и поддержка - Михаил Конник,
 % связаться можно по адресу mydebianblog@gmail.com
 %
-\ProvidesPackage{G7-32}[2003/07/07 v1.00 Titles for GOST 7.32-2001]
+% Further tweaks and development (according to the requirements of
+% ГОСТ 7.32-2001 ред. 2009 года.pdf and some other random wishes)
+% -- Ivan Zakharyaschev <imz@altlinux.org>.
+\ProvidesPackage{G7-32}[2015/11/01 v2.00 Titles for GOST 7.32-2001]
+
+%%%%%%%%%%%%%%%%%%
+%Latex 2012 and up
+\newcommand*{\No}{\textnumero}
+
+% ГОСТ 7.32-2001 ред. 2009 года.pdf item 6.1.2:
+% Полужирный шрифт не применяется
+\renewcommand\GostTitleStyle{%
+\hyphenpenalty=10000
+    \if@usebold%
+    \bfseries%
+    \else%
+    \normalfont%
+    \fi%
+}%
+
+% ГОСТ 7.32-2001 ред. 2009 года.pdf item 6.2.1:
+% Заголовки структурных элементов следует располагать в середине
+% строки без точки в конце и печатать прописными буквами, не
+% подчёркивая.
+\renewcommand\Gost@StructChapterStyle{
+\hyphenpenalty=10000
+    \if@usebold
+    \bfseries
+    \fi
+    \centering\MakeUppercase
+}
+
+% Get rid of the large font in chapter titles
+% (not sure whether this is regulated)
+% (TODO: Perhaps, this should be an option.)
+\renewcommand\Gost@MainChapterStyle{%
+\hyphenpenalty=10000
+    \if@usebold%
+    \bfseries%
+    \fi%
+}%
 
 %стандартные части
 \newcommand\Executors{%список исполнителей
- \chapter*{\CYRS\cyrp\cyri\cyrs\cyro\cyrk~%
-           \cyri\cyrs\cyrp\cyro\cyrl\cyrn\cyri\cyrt\cyre\cyrl\cyre\cyr\cyrishrt}%
+ \chapter*{Список~%
+           исполнителей}%
 }
 \newcommand\Referat{%реферат
- \chapter*{\CYRR\cyre\cyrf\cyre\cyrr\cyra\cyrt}%
+ \chapter*{Реферат}%
 }
 \newcommand\Abstract{%аннотация
- \chapter*{\CYRA\cyrn\cyrn\cyro\cyrt\cyra\cyrc\cyri\cyrya}%
+ \chapter*{Аннотация}%
 }
 \newcommand\AbstractEn{%abstract
  \chapter*{Abstract}%
 }
-
-\addto\captionsrussian{%содержание
+\addto\captionsrussian{%
  \def\contentsname{%
-  \CYRS\cyro\cyrd\cyre\cyrr\cyrzh\cyra\cyrn\cyri\cyre}%
+  Содержание}%
+ \def\bibname{%
+  Список~
+  использованных~
+  источников}%
 }
+\newcommand\NormRefs{%нормативные ссылки
+ \chapter*{Нормативные~%
+           ссылки}%
+           В настоящем отчете о НИР использованы ссылки на следующие стандарты.
+           \vspace{1ex}
+}
+
 \newenvironment{abstract}{%То же самое, только как у белых людей -- Коротков И.
  \Referat
 }{}
-\newcommand\NormRefs{%нормативные ссылки
- \chapter*{\CYRN\cyro\cyrr\cyrm\cyra\cyrt\cyri\cyrv\cyrn\cyrery\cyre~%
-           \cyrs\cyrs\cyrery\cyrl\cyrk\cyri}%
-}
 \newcommand\Defines{%глоссарий
- \chapter*{\CYRG\cyrl\cyro\cyrs\cyrs\cyra\cyrr\cyri\cyrishrt}%
+    \newpage
+    \section*{\centering ОПРЕДЕЛЕНИЯ}%Ugly hack((( FIXME
+    % суть в том что Defines находится внутри nomencl и только section выкидывает в нужное место
 }
 %\newcommand\Defines{%определения
-% \chapter*{\CYRO\cyrp\cyrr\cyre\cyrd\cyre\cyrl\cyre\cyrn\cyri\cyrya}%
+% \chapter*{Определения}%
 %}
 \newcommand\Abbreviations{%обозначения и сокращения
- \chapter*{\CYRO\cyrb\cyro\cyrz\cyrn\cyra\cyrch\cyre\cyrn\cyri\cyrya~\cyri~%
-           \cyrs\cyro\cyrk\cyrr\cyra\cyrshch\cyre\cyrn\cyri\cyrya}%
+ \chapter*{Обозначения~и~%
+           сокращения}%
 }
 \newcommand\Introduction{%введение
- \chapter{\CYRV\cyrv\cyre\cyrd\cyre\cyrn\cyri\cyre}%
+ \chapter{Введение}%
 }
 \newcommand\Conclusion{%заключение
- \chapter{\CYRZ\cyra\cyrk\cyrl\cyryu\cyrch\cyre\cyrn\cyri\cyre}%
-}
-\addto\captionsrussian{%список использованных источников
- \def\bibname{%
-  \CYRS\cyrp\cyri\cyrs\cyro\cyrk~
-  \cyri\cyrs\cyrp\cyro\cyrl\cyrsftsn\cyrz\cyro\cyrv\cyra\cyrn\cyrn\cyrery\cyrh~
-  \cyri\cyrs\cyrt\cyro\cyrch\cyrn\cyri\cyrk\cyro\cyrv}%
+ \chapter{Заключение}%
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Personal names, roles and signatures
+% (for Executors and the managers on the title page)
+
+\newcommand*\personalSignature[2]{%
+  \par\noindent
+  \makebox[\textwidth]{%
+    \parbox[b]{.4\textwidth}{\raggedright #1}
+    \hfill
+    \parbox[t]{.25\textwidth}{\ulfill\mbox{}}
+    \hfill
+    \parbox[t]{.25\textwidth}{\raggedright #2}
+  }
+}
+
+\newcommand*\ulfill{\mbox{}\leaders\hrule depth 2pt height -1.5pt\hfill} % similar to an underline
+
+\newenvironment*{executors}{%
+  \Executors
+  % There will be subheadings like:
+  % 
+  % * perhaps -- Руководитель темы
+  % * Исполнители:
+  % * optionally -- Соисполнители
+  % 
+  % They should be printed without an indent.
+  \setlength{\parindent}{0pt}
+  % This environment could be useful to change other parameters as
+  % well:
+  % TODO: parameterize the sizes of the blocks in \personalSignature
+}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Элементы оформления титульной страницы
-\newcommand\Nir@UdkName{\CYRU\CYRD\CYRK}
+% UDK number
+\newcommand\Nir@UdkName{УДК \makebox[3em]{\ulfill}%
+}
+\newcommand*\NirUdk[1]{\renewcommand\Nir@UdkName{#1}}%%virens added: для изменения УДК в тексте документа
 
+% Government registration number
 \newcommand\Nir@No{%
- \No~\cyrg\cyro\cyrs\cyrr\cyre\cyrg\cyri\cyrs\cyrt\cyrr\cyra\cyrc\cyri\cyri%
+ \No~госрегистрации \makebox[3em]{\ulfill}%
 }
+\newcommand*\NirGosNo[1]{\renewcommand\Nir@No{#1}}%%virens added: номер госрегистрации
 
-\newcommand\Nir@Confirm{
- {\small\CYRU\CYRT\CYRV\CYRE\CYRR\CYRZH\CYRD\CYRA\CYRYU}%
+% Examples number
+\newcommand\Nir@Ekz{%
+    \vspace{-2ex}                 % Number examples
 }
+\newcommand*\NirEkz[1]{\renewcommand\Nir@Ekz{#1}}               %%  To change exemples num
 
+% Grif
+\newcommand\Nir@Grif{\vspace{-2ex}}                          % Top secret if needed, default blank
+\newcommand*\NirGrif[1]{\renewcommand\Nir@Grif{#1}}             %%  To change grif 
+
+% Confirm text
+\newcommand*\Nir@Confirm{%
+Утверждаю%
+}
+\newcommand*\NirConfirm[1]{\renewcommand\Nir@Confirm{#1}}       %%  To change confirm
+
+% Inventory number
 \newcommand\Nir@InventarNo{
- \CYRI\cyrn\cyrv.~\No
+ Инв.~\No \makebox[3em]{\ulfill}%
 }
+\newcommand*\NirInventarNo[1]{\renewcommand\Nir@InventarNo{#1}} % to change Inv number
 
-\newcommand\Nir@Otchet{{%
- \small\CYRO\CYRT\CYRCH\CYRYO\CYRT \\
- \CYRO{} \CYRN\CYRA\CYRU\CYRCH\CYRN\CYRO-%
- \CYRI\CYRS\CYRS\CYRL\CYRE\CYRD\CYRO\CYRV\CYRA\CYRT\CYRE\CYRL\CYRSFTSN\CYRS\CYRK\CYRO\CYRISHRT{} %
- \CYRR\CYRA\CYRB\CYRO\CYRT\CYRE%
-}}
+% Organization name
+\newcommand\Nir@OrgLongName{
+    \vspace{1ex}
 
+\hrule
+\vspace{1ex}
+
+{\footnotesize предприятие (организация)}
+}
+\newcommand\NirOrgLongName[1]{\renewcommand\Nir@OrgLongName{#1}}
+
+
+% Report Name
+\newcommand*\Nir@ReportName{%
+ Отчёт%
+}
+\newcommand\NirReportName[1]{\renewcommand\Nir@ReportName{#1}}        % to change otchet name text
+
+% Report about text
+\newcommand*\Nir@About{
+ О{} НАУЧНО-%
+ ИССЛЕДОВАТЕЛЬСКОЙ{} %
+ РАБОТЕ%
+}
+\newcommand\NirAbout[1]{\renewcommand\Nir@About{#1}}      % to change otchet about text
+
+% Annotated report
 \newcommand\Nir@AnnOtchet{ %отчёт аннотационный!?
 }
+\newcommand*\NirIsAnnotacion[1]{\renewcommand\Nir@AnnOtchet{#1}} %%Если отчёт аннотационный
 
-\newcommand\Nir@MainBegin{%
- \CYRR\cyru\cyrk\cyro\cyrv\cyro\cyrd\cyri\cyrt\cyre\cyrl\cyrsftsn{} %
- \CYRN\CYRI\CYRR%
-}
+% Report part 
+\newcommand*\Nir@PartNum{\vspace{-2ex}}     % Part name and number 
+\newcommand\NirPartNum[2]{\renewcommand\Nir@PartNum{#1 #2}}     % to change finalname  text
 
-\newcommand\Nir@OrgLongName{%
- \CYRP\cyro\cyrl\cyrn\cyro\cyre~
- \cyrn\cyra\cyrz\cyrv\cyra\cyrn\cyri\cyre~
- \cyro\cyrr\cyrg\cyra\cyrn\cyri\cyrz\cyra\cyrc\cyri\cyri%
-}
-
-\newcommand\Nir@StageNo{ % номер этапа работ
-}
-
-\newcommand\Nir@StageTitle{ % заголовок этапа работ
-}
-\newcommand\Nir@StageType{ % вид отчёта
-}
-
-
-\newcommand\Nir@BossPost{%
- \CYRK\cyrt\cyro \newline
- \cyru\cyrt\cyrv\cyre\cyrr\cyrzh\cyrd\cyra\cyre\cyrt%
-}
-
-\newcommand\Nir@BossName{\CYRF.~\CYRI.~\CYRO}
+% Report Year
 \newcommand\Nir@Year{\the\year}
-\newcommand\Nir@Town{\CYRG\cyro\cyrr\cyro\cyrd}
-\newcommand\Nir@ManagerPost{%
- \cyrb\cyro\cyrl\cyrsftsn\cyrsh\cyro\cyrishrt{}
- \cyrn\cyra\cyrch\cyra\cyrl\cyrsftsn\cyrn\cyri\cyrk%
+\newcommand*\NirYear[1]{\renewcommand\Nir@Year{#1}} % Year of report changeable
+
+\newcommand\Nir@Town{}
+\newcommand*\NirTown[1]{\renewcommand\Nir@Town{#1}}%%virens added: указываем город написания отчёта
+
+\newcommand\Nir@BossStamp{
+    \parbox[t]{.49\linewidth}{
+        {\centering\MakeUppercase{\Nir@Confirm} % Confirmation name 
+
+        }
+        \vspace{5mm}
+        {\raggedright\Nir@BossPost          % Director job
+
+        }
+        \bigskip
+        \ulfill~\Nir@BossName               % Director name
+
+        \bigskip
+        <<\makebox[3em]{\ulfill}>>~\ulfill~\Nir@Year~г. % Signature
+    }
+}
+\newcommand*\NirBossStamp[1]{\renewcommand\Nir@BossStamp{#1}} % Changeable ID Boss stamp
+
+
+\newcommand\Nir@BossPost{
+    \vspace{3ex}
+    \hrule\par \vspace{1ex}
+    \centering\footnotesize головной исполнитель НИР
+}
+\newcommand\Nir@BossName{\makebox[5em]{\ulfill}}
+
+\newcommand*\NirBoss[3][0.49]{
+    \renewcommand\Nir@BossPost{#2}\renewcommand\Nir@BossName{#3}
+    \renewcommand\Nir@BossStamp{
+        \parbox[t]{#1\linewidth}{
+            {\centering\MakeUppercase{\Nir@Confirm} % Confirmation name 
+
+            }
+            \vspace{5mm}
+            {\raggedright\Nir@BossPost          % Director job
+
+            }
+            \bigskip
+            \ulfill~\Nir@BossName               % Director name
+
+            \bigskip
+            <<\makebox[3em]{\ulfill}>>~\ulfill~\Nir@Year~г. % Signature
+        }
+    }
+} % ID of Director
+
+% Head manager stamp
+\newcommand\Nir@ManagerStamp{\vspace{-2ex}}
+\newcommand\Nir@ManagerPost{
+    \vspace{3ex}
+    \hrule\par \vspace{1ex}
+    \centering\footnotesize научный руководитель НИР
+}
+\newcommand\Nir@ManagerName{\makebox[5em]{\ulfill}}
+
+\newcommand*\NirManager[3][.49]{
+    \renewcommand\Nir@ManagerPost{#2} \renewcommand\Nir@ManagerName{#3}
+    \renewcommand\Nir@ManagerStamp{
+        \parbox[t]{#1\linewidth}{
+            {\raggedright\Nir@ManagerPost
+
+            }
+            \bigskip
+            \ulfill~\Nir@ManagerName
+
+            \bigskip
+            <<\makebox[3em]{\ulfill}>>~\ulfill~\Nir@Year~г.
+        }
+    }
+} % ID of head of research
+\newcommand*\NirManagerStamp[1]{\renewcommand\Nir@ManagerStamp{#1}} % Changeable ID Manager stamp
+
+% Head executor of research
+\newcommand\Nir@IspStamp[1]{\vspace{-2ex}}
+\newcommand\Nir@IspPost{
+    \vspace{3ex}
+\hrule\par
+\vspace{1ex}
+\centering\footnotesize ответственный исполнитель
+}
+\newcommand\Nir@IspName{\makebox[5em]{\ulfill}}
+\newcommand*\NirIsp[3][0.49]{
+    \renewcommand\Nir@IspPost{#2}\renewcommand\Nir@IspName{#3}
+    \renewcommand\Nir@IspStamp[1]{
+        \parbox[t]{#1\linewidth}{
+            {\raggedright\Nir@IspPost
+
+            }
+            \bigskip
+            \ulfill~\Nir@IspName
+
+            \bigskip
+            <<\makebox[3em]{\ulfill}>>~\ulfill~\Nir@Year~г.
+        }
+    }
+} % ID of head executor of research
+\newcommand*\NirIspStamp[1]{\renewcommand\Nir@IspStamp{#1}}     % Changeable head executor stamp
+
+%fix for first time compilation
+\newcommand\Nir@Title{\vspace{-2ex}}
+\newcommand\Nir[1]{\renewcommand\Nir@Title{#1}}  %Название НИР, не совместимо с \NirTitle  
+\newcommand\Nir@TitleAndSubject{
+    \vspace{5ex}
+\hrule\par\vspace{1ex}
+\centering\footnotesize наименование и шифр НИР\par\vspace{5ex}
+\hrule
 }
 
-\newcommand\Nir@ManagerName{\CYRI\cyrv\cyra\cyrn\cyro\cyrv}
+%
+% The simple case when the subject of the report is the same
+% as the NIR title -- like in example 2 in ГОСТ 7.32-2001 ред. 2009 года.pdf:
 
-\newcommand\NirTitle[1]{
- \thispagestyle{empty}
- \begin{centering}
-  \linespread{1.1}\normalsize
-  {\Nir@OrgLongName}
-
-  \vfill
-  \begin{tabular}{p{80mm}p{80mm}}
-    \Nir@UdkName \newline
-    \Nir@No \newline
-    \Nir@InventarNo \newline
-   &
-    \Nir@Confirm
-
-    \vspace{5mm}
-    \Nir@BossPost \newline \newline
-    \underline{~~~~~~~~~~~~~~~~~} \Nir@BossName \newline
-    <<\underline{~~~~}>>\underline{~~~~~~~~~~~~~~~~~} \Nir@Year~\cyrg.
-  \end{tabular}
-  \vfill
-
-\Nir@AnnOtchet \Nir@Otchet
-
-  \vspace{8mm}
-  #1
-  \vspace{8mm}
-
-\Nir@StageNo~~\Nir@StageTitle 
-
-(\Nir@StageType)
-
-
-
-  \vfill
-  \begin{tabular}{p{80mm}p{80mm}}
-    \Nir@MainBegin, \newline
-    \Nir@ManagerPost
-   &
-    ~\newline\underline{~~~~~~~~~~~~~~~~~~~} \Nir@ManagerName \newline
-  \end{tabular}
-  \vfill
-  \vfill
-  \Nir@Town~\Nir@Year
-
- \end{centering}
- \linespread{\Gost@LineSpread}\normalsize
+%
+% Optionally, specify a different report subject:
+\newcommand\NirSubject[1]{%
+  \renewcommand\Nir@TitleAndSubject{%
+    \Nir@Title
+    \vspace{1ex}
+    \par
+    \NirSubjectModifier{#1}%
+  }%
 }
+
+%
+% The default modifier is as in example 1 in ГОСТ 7.32-2001 ред. 2009 года.pdf:
+% "по теме:"
+\newcommand\NirSubjectModifier{%
+  по~теме:\\
+  %\MakeUppercase%
+}
+%
+% A switch for the variant of the modifier as
+% in example 3 in ГОСТ 7.32-2001 ред. 2009 года.pdf:
+% (empty)
+\newcommand*\NirBareSubject[1]{%
+  \renewcommand\NirSubjectModifier{}%
+}
+
+% вид отчёта:
+% The default "stage type" is "intermediate" ("промежуточный")
+% (this default saves typing unless you need a modified stage type):
+% "промежуточный"
+\newcommand\intermediatename{промежуточный}
+\newcommand\Nir@StageType{\intermediatename}
+% "заключительный"
+\newcommand\@finalname{заключительный}
 
 %Эти команды нужно вызвать для корректного определения титульной страницы
-\newcommand\NirStage[3]{\renewcommand\Nir@StageNo{#1}\renewcommand\Nir@StageType{#2}\renewcommand\Nir@StageTitle{#3}}%%virens added: номер госрегистрации
-\newcommand\NirIsAnnotacion[1]{\renewcommand\Nir@AnnOtchet{#1}} %%Если отчёт аннотационный
-\newcommand\NirOrgLongName[1]{\renewcommand\Nir@OrgLongName{#1}}
-\newcommand\NirBoss[2]{\renewcommand\Nir@BossPost{#1}\renewcommand\Nir@BossName{#2}}
-\newcommand\NirYear[1]{\renewcommand\Nir@Year{#1}}
-\newcommand\NirManager[2]{\renewcommand\Nir@ManagerPost{#1}\renewcommand\Nir@ManagerName{#2}}
-\newcommand\NirTown[1]{\renewcommand\Nir@Town{#1}}%%virens added: указываем город написания отчёта
-\newcommand\NirUdk[1]{\renewcommand\Nir@UdkName{#1}}%%virens added: для изменения УДК в тексте документа
-\newcommand\NirGosNo[1]{\renewcommand\Nir@No{#1}}%%virens added: номер госрегистрации
+
+% One of the "stage type" variants
+% (if different from the default "intermediate")
+% -- set to "final"/"заключительный" if the arg is silently omitted.
+% The second variant is not supported
+% by any example in ГОСТ 7.32-2001 ред. 2009 года.pdf,
+% but it is like in a document example I've seen elsewhere.
+\newcommand*\NirFinal[1][\@finalname]{%
+  \renewcommand\Nir@StageType{#1}%
+}
+\newcommand*\NirFinalStage[2][\@finalname]{%
+  \renewcommand\Nir@StageType{#1, #2}%
+} % Usage: \NirFinalStage[промежуточный]{этап~3}
+
+% Following allows to change command arguments
+\newcommand\finalname[1]{\renewcommand\@finalname{#1}}          % to change finalname  text
+
+\newcommand\Nir@Code{шифр\,---\,\makebox[6em]{\ulfill}}
+\newcommand*\NirCode[1]{\renewcommand\Nir@Code{#1}} % Code of report changeable
+
+
+\RequirePackage{etoolbox}%                                  For \newrobustcmd
+\def\beamer@calltheme#1#2#3{%
+    \def\beamer@themelist{#2}%
+    \@for\beamer@themename:=\beamer@themelist\do
+    {\usepackage[{#1}]{#3\beamer@themename}}}
+
+  \newrobustcmd*\gosttitle[2][]{\beamer@calltheme{#1}{#2}{gosttitle}}
+
+\def\maketitle{\titlepage}
+
+
+
+%Title page 
+\newenvironment*{titlepage}{}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Compatibility macros
+% (with old versions of the style package):
+
+
+\RequirePackage{mfirstuc}
+\newcommand*\makefirstlc[1]{%
+  \renewcommand*\mfirstucMakeUppercase{\MakeLowercase}%
+  % switched the case-switching command for a while
+  \makefirstuc{#1}%
+  \renewcommand*\mfirstucMakeUppercase{\MakeUppercase}%
+}
+\newcommand*\xmakefirstlc[1]{%
+  \renewcommand*\mfirstucMakeUppercase{\MakeLowercase}%
+  % switched the case-switching command for a while
+  \xmakefirstuc{#1}%
+  \renewcommand*\mfirstucMakeUppercase{\MakeUppercase}%
+}
+\newcommand*\emakefirstlc[1]{%
+  \renewcommand*\mfirstucMakeUppercase{\MakeLowercase}%
+  % switched the case-switching command for a while
+  \emakefirstuc{#1}%
+  \renewcommand*\mfirstucMakeUppercase{\MakeUppercase}%
+}
+
+\newcommand*\NirStage[3]{%
+  \NirSubject{#3}%
+  \NirFinalStage[#2]{\emakefirstlc{#1}}%
+}
+% Usage example from virens
+% <http://mydebianblog.blogspot.ru/2008/09/732-2001-latex.html>:
+% 
+%     \NirStage{Этап \No 1.1}{промежуточный}{"Обзор современного состояния торсионных наногенераторов"}
+%
+% If you are using pdflatex, it might require putting the first Russian letter in braces (see
+% <http://ctan.uni-altai.ru/macros/latex/contrib/mfirstuc/mfirstuc-manual.html#sec:utf8>),
+% but if you are using xelatex, you must be OK:
+% 
+%     \NirStage{{Э}тап \No 1.1}{промежуточный}{"Обзор современного состояния торсионных наногенераторов"}
+% 
+% There, the resulting formatting violates the current standard style;
+% it can be seen at
+% http://bp0.blogger.com/_hM8AMxgJLzw/SH3c4fS0zhI/AAAAAAAAAs0/sH6kGPItCAk/s1600-h/G7-32NIRreportexample.jpg
+%
+% We use the arguments of the old macro, but format them according to
+% the current standard style. (This will allow to easily reformat old documents!)
+%
+% If you want the virens' (non-conforming) formatting, here is a
+% general switch:
+\newcommand*\nirVirensTitle{%
+  \renewcommand*\NirSubjectModifier{}%
+  \renewcommand*\NirFinalStage[2][\finalname]{%
+    \NirFinal[##1]%
+    \renewcommand*\NirSubjectModifier{\emakefirstuc{##2}~~}%
+  }%
+  % renewcommand merely to shortcut the case conversion done
+  % in \NirStage (to avoid an error):
+  \renewcommand*\NirStage[3]{%
+    \NirSubject{##3}%
+    \NirFinalStage[##2]{##1}%
+  }%
+} % It should be used before any uses of \NirFinalStage, of course.
+
+% Обозначения и сокращения
+\RequirePackage{nomencl}%
+
+\def\three@digits#1{\ifnum#1>99\else\ifnum#1>9 0\else00\fi\fi\number#1}
+
+\newcounter{abbrev}%
+\newcommand{\Define}[2]{\nomenclature[X]{#1}{#2.}}%
+\newcommand{\Abbrev}[2]{%
+    \addtocounter{abbrev}{1}%
+    \nomenclature[Y{\three@digits{\value{abbrev}}}]{#1}{#2.}%
+}%
+
+\renewcommand\nomname{}%
+\renewcommand\nomgroup[1]{%
+    \if#1X%
+        \Defines%
+    \else%
+        \Abbreviations%
+    \fi%
+}%
+\renewcommand\nomlabel[1]{#1 \cdash---\kern-0.4em}%
+\renewcommand\thenomenclature{%
+    \list{}{%
+        \let\makelabel\nomlabel%
+    }%
+}%
+
+\makenomenclature%
+

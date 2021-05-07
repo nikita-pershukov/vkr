@@ -86,3 +86,15 @@ citecolor=black, menucolor=black, filecolor=black,
 %\makeatletter
 %\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname \quad}
 %\makeatother
+
+% Include image
+\newcommand{\includeimg}[3]{
+    \begin{figure}[H]
+        \centering
+        \includegraphics[#2]{../graphics/img/#1}
+        \caption{#3}
+        \label{#1}
+    \end{figure}
+}
+
+\newcommand{\imref}[1]{(Рис.~\ref{#1})}

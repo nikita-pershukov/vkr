@@ -2,7 +2,14 @@
 \documentclass[utf8x, 14pt]{G7-32} % Стиль (по умолчанию будет 14pt)
 
 % other settings
+\include{preamble.inc}
 \include{0-preamble}
+\ifPDFTeX
+\include{listings.inc}
+\else
+\usepackage{local-minted}
+\fi
+\include{macros.inc}
 
 \begin{document}
 
@@ -21,12 +28,13 @@
 \tableofcontents
 \clearpage
 
+\printnomenclature % Автоматический список сокращений
+
 \include{0-5-intro}
 \include{0-6-terms}
 
 % enable counters
 \mainmatter
-\nodotsforchapters
 
 % begin main part
 
@@ -44,7 +52,7 @@
 
 \include{11-0-biblio}
 
-\nobreakingbeforechapters
+%\nobreakingbeforechapters
 \include{12-0-appendix}
 
 \end{document}
