@@ -1,3 +1,36 @@
 \section{NFS}
 \label{sec:nfs}
 
+Следующим этапом стало подключение системы хранения данных для контейнеров. Для этого была создана NFS
+\Abbrev{NFS}{blablabla}
+-- сетевая файловая система. Она подключена с помощью проекта NFS Subdir External Provisioner для кластера Kubernetes. Проект также пришлось адаптировать под созданные хранилища отдельно на SSD
+\Abbrev{SSD}{blablabla}
+и HDD:
+\Abbrev{HDD}{blablabla}
+\begin{enumerate}
+    \item Файл \texttt{deploy/helm/values.yaml} (ПРИЛОЖЕНИЕ ТАКОЕ-ТО):
+
+        На месте примера с одной подключаемой NFS была переписана структура YAML-манифеста, которая теперь включает подразделы ssd и hdd, в которых уже, в свою очередь, указывается IP адрес сервера, путь до директории на сервере и опции монтирования.
+
+    \item Файл \texttt{deploy/helm/templates/deployment.yaml} (ПРИЛОЖЕНИЕ ТАКОЕ-ТО):
+
+        Из-за подключения двух NFS у Storage Provisioner
+        \Define{Storage Provisioner}{blablabla}
+        для Kubernetes необходимо было создать, соотвественно, два контейнера: один для хранилища на SSD, второй для HDD. В связи с этим были продублирован раздел с контейнером, изменены их имена и метки, подправлены обращения к переменным в \texttt{deploy/helm/values.yaml}, и добавлены необходимые volumes
+        \Define{volumes}{blablabla}
+        для монтирования.
+
+    \item Файл \texttt{deploy/helm/templates/storageclass.yaml} (ПРИЛОЖЕНИЕ ТАКОЕ-ТО):
+
+        Также, как и в \texttt{deploy/helm/templates/deployment.yaml}, были скорректированы обращения к переменным в \texttt{deploy/helm/values.yaml}, продублирован StorageClass,
+        \Define{StorageClass}{blablabla}
+        поправлены имена во избежание коллизий.
+
+\end{enumerate}
+
+После выполнения подготовки и настройки конфигурации под имеющиеся NFS, необходимые сущности Kubernetes разворачиваются с помощью Helm по инструкции проекта. Также, после развертывания проекта, необходимо написать YAML-манифесты для создания набора тестовых экземпляров сущностей Kubernetes, чтобы проверить работу хранилища: PersistentVolumeClaim,
+\Define{PersistentVolumeClaim}{blablabla}
+обращающегося к необходимому StorageClass, несколько Pod
+\Define{Pod}{blablabla} с PersistentVolume,
+\Define{PersistentVolume}{blablabla}
+который обращается к указанному ранее PersistentVolumeClaim, один из которых записывает в него данные, а другой позволяет их прочесть (ПРИЛОЖЕНИЕ ТАКОЕ-ТО).

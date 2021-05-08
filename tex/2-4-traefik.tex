@@ -1,3 +1,74 @@
 \section{Traefik}
 \label{sec:traefik}
 
+Далее необходимо было настроить Ingress Controller для промышленного использования, то есть обработки сетевого трафика. В качестве этого инструмента был выбран Traefik.
+\Define{Traefik}{blablabla}
+Он, в сравнении с предлагаемым по умолчанию nginx, является намного более современным, лишенным некоторых ощутимых недостатков, которые присущи nginx. Его настройка также заслуживает внимания:
+
+Файл values.yaml (ПРИЛОЖЕНИЕ ТАКОЕ-ТО):
+\begin{itemize}
+    \item \texttt{ingressClass[enabled]: true}
+
+        Этот параметр означает, что будет создана сущность IngressClass в кластере Kubernetes для того, чтобы он корректно увидел новый Ingress Controller.
+
+    \item \texttt{ingressClass[isDefaultClass]: true}
+
+        Задание Traefik как Ingress Controller по умолчанию.
+
+    \item \texttt{pilot[enabled]: true}
+
+        Эта опция включает возможность управления и мониторинга активности Traefik посредством веб-интерфейса. За ней следует еще одна, содержащая токен.
+
+    \item \texttt{volumes}
+
+        Этот раздел параметров указывает сущности Kubernetes, которые необходимо подключить к Pod Traefik. На данном этапе это используется, чтобы подключить wildcard сертификаты
+        \Define{Wildcard сертификат}{blablabla}
+        для сайтов.
+
+    \item \texttt{ports[web][hostPort]: 80}
+
+        Это значение позволяет включить проброс сетевого трафика с 80-го порта инстанса, на котором будет находиться Pod Traefik на заданный по умолчанию порт самого Pod Traefik.
+
+    \item \texttt{ports[web][redirectTo]: websecure}
+
+        Эта опция включает перенаправления трафика с HTTP на HTTPS.
+
+    \item \texttt{ports[websecure][hostPort]: 443}
+
+        Аналогично подобной опции в разделе \texttt{web}, позволяет проброс трафика с хостовой машины внутрь Pod Traefik.
+
+    \item \texttt{ports[websecure][tls][enabled]: true}
+
+        Эту опцию необходимо включать для того, чтобы работали сертификаты для HTTPS. Далее, в разделе tls,
+        \Define{TLS}{blablabla}
+        указываются пути до сертификатов и обслуживаемые доменные имена.
+
+    \item \texttt{service[enabled]: false}
+
+        Так как у нас Traefik является входным узлом, то для него не требуется сущность Service
+        \Define{Service}{blablabla}
+        Kubernetes.
+
+    \item \texttt{persistence[enabled]: true}
+
+        Использование PerstistentVolumeClaim Kubernetes для хранения TLS сертификатов. Далее также необходимо указать корректный StorageClass, который был создан ранее.
+
+    \item \texttt{podSecurityPolicy[enabled]: true}
+
+        Включение аспектов безопасности Pod Traefik.
+
+    \item \texttt{resources}
+
+        Этот раздел аргументов позволяет задать минимальные требования по ресурсам для запуска Traefik, а также его лимиты, за которые он не сможет выйти по потреблению.
+
+    \item \texttt{nodeSelector}
+
+        С помощью сущности NodeSelector
+        \Define{NodeSelector}{blablabla}
+        можно указать, на каком хосте или группе хостов должен оказаться конкретный Pod. В данном случае, это позволяет расположить Pod Traefik именно там, куда проброшен трафик из Интернета.
+
+    \item \texttt{tolerations}
+
+        С помощью данной сущности Kubernetes можно обойти какие-либо ограничения. В текущем случае, это ограничение на планирование запуска Pod на master ноде.
+
+\end{itemize}
