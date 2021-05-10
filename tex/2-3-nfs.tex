@@ -31,6 +31,7 @@
 После выполнения подготовки и настройки конфигурации под имеющиеся NFS, необходимые сущности Kubernetes разворачиваются с помощью Helm по инструкции проекта. Также, после развертывания проекта, необходимо написать YAML-манифесты для создания набора тестовых экземпляров сущностей Kubernetes, чтобы проверить работу хранилища: PersistentVolumeClaim,
 \Define{PersistentVolumeClaim}{blablabla}
 обращающегося к необходимому StorageClass, несколько Pod
-\Define{Pod}{blablabla} с PersistentVolume,
+\Define{Pod}{blablabla}
+с PersistentVolume,
 \Define{PersistentVolume}{blablabla}
 который обращается к указанному ранее PersistentVolumeClaim, один из которых записывает в него данные, а другой позволяет их прочесть (ПРИЛОЖЕНИЕ ТАКОЕ-ТО).
