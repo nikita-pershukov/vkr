@@ -1,3 +1,62 @@
 \section{CI/CD}
 \label{sec:ci-cd}
 
+После этого была начата разработка тестового проекта для развертывания в кластере с помощью CI/CD.
+\Abbrev{CI/CD}{blablabla}
+\Define{Continuous Integration and Continuous Delivery or Deployment}{blablabla}
+За основу был взят минимальный веб-сервер на языке программирования Go,
+\Define{Go}{blablabla}
+который отдавал статичную страницу. Далее был написан Dockerfile
+\Define{Dockerfile}{blablabla}
+с командами для сборки и запуска веб-сервера. Первая его часть основан на Docker Image
+\Define{Docker Image}{blablabla}
+\texttt{golang:1.8-alpine}. Далее код копируется внутрь Docker Image посредством директивы texttt{ADD} и компилируется с помощью директивы \texttt{RUN}. После этого берется второй Docker Image \texttt{alpine:latest}, в который переносится скомпилированный веб-сервер директивой \texttt{COPY}. Также объявляется порт для прослушивания трафика директивой \texttt{ENV}. И последней директивой \texttt{CMD} запускается веб-сервер.
+
+Далее было необходимо написать Helm-chart для развертывания контейнера Docker и всех необходимых для его работы сущностей Kubernetes в кластере. В качестве ключевых файлов выступают \texttt{.helm/values.yaml} и \texttt{.helm/Chart.yaml}, в которых содержатся:
+
+\begin{itemize}
+    \item Название проекта.
+    \item Описание проекта.
+    \item Версия проекта.
+    \item Версия используемого API.
+    \item Название Docker Image.
+    \item Тег Docker Image.
+    \item Политика скачивания образа.
+    \item Количество копий образа, которое должно быть запущено.
+    \item Порт, на котором веб-сервер образа слушает трафик.
+\end{itemize}
+
+На основе этих переменных все остальные файлы в директории \texttt{.helm/templates} будут описывать сущности кластера Kubernetes:
+
+\begin{itemize}
+    \item \texttt{helm/templates/deployment-app.yaml}
+    \item \texttt{helm/templates/service-app.yaml}
+    \item \texttt{helm/templates/ingress.yaml}
+\end{itemize}
+
+Далее был написан файл \texttt{.gitlab-ci.yml}, который является YAML-манифестом для описания этапов CI/CD для развертывание проекта в кластере. Он состоит из трех этапов:
+
+\begin{itemize}
+    \item \texttt{build}.
+    \item \texttt{push}.
+    \item \texttt{deploy}.
+\end{itemize}
+
+Этап \texttt{build} выполняется в одну команду \texttt{docker build} с указанием тега самим GitLab Runner.
+\Define{GitLab Runner}{blablabla}
+
+Этап \texttt{push} требует предварительной аутентификации в Docker Registry,
+\Define{Docker Registry}{blablabla}
+для этого был взят пример из официальной документации по GitLab. После этого выполняется \texttt{docker push}.
+
+Этап \texttt{deploy}, относящийся к CD уже намного сложнее. Для этого требуется задать в GitLab API
+\Abbrev{API}{blablabla}
+\Define{Application Programming Interface}{blablabla}
+URL
+\Abbrev{URL}{blablabla}
+\Define{Uniform Resource Locator}{blablabla}
+кластера Kubernetes, а также его токен.
+\Define{Токен}{blablabla}
+После чего в начале выполнения этапа мы задаем эти переменные в окружение с помощью \texttt{kubectl},
+\Define{kubectl}{blablabla}
+после чего происходит проверка на то, существуюет ли уже данный проект в кластере. Если проект существет, то будет выполнена команда \texttt{helm upgrade}, в противном случае будет выполнена команда \texttt{helm install}. Детальнее эти вещи можно увидеть в ПРИЛОЖЕНИЕ ТАКОМ-ТО.
