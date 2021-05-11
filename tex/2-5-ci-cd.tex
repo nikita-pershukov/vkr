@@ -4,12 +4,11 @@
 После этого была начата разработка тестового проекта для развертывания в кластере с помощью CI/CD.
 \Abbrev{CI/CD}{blablabla}
 \Define{Continuous Integration and Continuous Delivery or Deployment}{blablabla}
-За основу был взят минимальный веб-сервер на языке программирования Go,
-\Define{Go}{blablabla}
-который отдавал статичную страницу. Далее был написан Dockerfile
-\Define{Dockerfile}{blablabla}
+За основу был взят минимальный веб-сервер на языке программирования Go -- язык программирования, начало которого было положено в 2007 году сотрудниками компании Google \cite{def:go},
+\Define{Go}{язык программирования, начало которого было положено в 2007 году сотрудниками компании Google \cite{def:go}}
+который отдавал статичную страницу. Далее был написан Dockerfile -- описание правил по сборке образа, в котором первая строка указывает на базовый образ \cite{def:docker},
+\Define{Dockerfile}{описание правил по сборке образа, в котором первая строка указывает на базовый образ \cite{def:docker}}
 с командами для сборки и запуска веб-сервера. Первая его часть основан на Docker Image
-\Define{Docker Image}{blablabla}
 \texttt{golang:1.8-alpine}. Далее код копируется внутрь Docker Image посредством директивы texttt{ADD} и компилируется с помощью директивы \texttt{RUN}. После этого берется второй Docker Image \texttt{alpine:latest}, в который переносится скомпилированный веб-сервер директивой \texttt{COPY}. Также объявляется порт для прослушивания трафика директивой \texttt{ENV}. И последней директивой \texttt{CMD} запускается веб-сервер.
 
 Далее было необходимо написать Helm-chart для развертывания контейнера Docker и всех необходимых для его работы сущностей Kubernetes в кластере. В качестве ключевых файлов выступают \texttt{.helm/values.yaml} и \texttt{.helm/Chart.yaml}, в которых содержатся:
@@ -18,7 +17,9 @@
     \item Название проекта.
     \item Описание проекта.
     \item Версия проекта.
-    \item Версия используемого API.
+    \item Версия используемого API \cite{def:api}.
+        \Abbrev{API}{Application Programming Interface}
+        \Define{Application Programming Interface}{описание способов (набор классов, процедур, функций, структур или констант), которыми одна компьютерная программа может взаимодействовать с другой программой \cite{def:api}}
     \item Название Docker Image.
     \item Тег Docker Image.
     \item Политика скачивания образа.
@@ -45,13 +46,11 @@
 Этап \texttt{build} выполняется в одну команду \texttt{docker build} с указанием тега самим GitLab Runner.
 \Define{GitLab Runner}{blablabla}
 
-Этап \texttt{push} требует предварительной аутентификации в Docker Registry,
-\Define{Docker Registry}{blablabla}
+Этап \texttt{push} требует предварительной аутентификации в Docker Registry -- зарезервированный сервер, используемый для хранения docker-образов \cite{def:docker},
+\Define{Docker Registry}{зарезервированный сервер, используемый для хранения docker-образов \cite{def:docker}}
 для этого был взят пример из официальной документации по GitLab. После этого выполняется \texttt{docker push}.
 
 Этап \texttt{deploy}, относящийся к CD уже намного сложнее. Для этого требуется задать в GitLab API
-\Abbrev{API}{blablabla}
-\Define{Application Programming Interface}{blablabla}
 URL
 \Abbrev{URL}{blablabla}
 \Define{Uniform Resource Locator}{blablabla}
