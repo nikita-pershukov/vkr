@@ -2,3 +2,16 @@
 \label{sec:gitlab}
 
 Первым этапом было необходимо развренуть систему контроля версий. Ранее был выбран GitLab как комплексное решение данной задачи.
+
+GitLab предоставляет на первый взгляд простое и удобное решение для собственного развертывания с помощью Docker~\textbf{https://docs.gitlab.com/omnibus/docker/README.html}. Также, на официальном сайте есть примеры использования docker-compose~\textbf{docker-compose} и docker swarm~\textbf{docker swarm}. Недостатком этого решения является то, что несколько разных по своей сути микросервисов объединены в один контейнер Docker. Поэтому было решено разделить эти сущности на разные контейнеры. В итоге проделанной работы были разнесены, описаны как отдельные сущности и настроены:
+\begin{itemize}
+    \item GitLab;
+    \item Redis~\textbf{Redis};
+    \item PostgreSQL~\textbf{PostgreSQL};
+    \item Prometheus~\textbf{Prometheus};
+    \item Grafana~\textbf{Grafana};
+    \item Cadvisor~\textbf{Cadvisor};
+    \item Node-exporter~\textbf{Node-exporter}.
+\end{itemize}
+
+Детальнее можно ознакомится с конфигурацией GitLab и вспомогательных инстурментов в ПРИЛОЖЕНИИ ТАКОМ-ТО.

@@ -68,8 +68,8 @@
  \def\contentsname{%
   Содержание}%
  \def\bibname{%
-  Список~
-  использованных~
+  Список 
+  использованных 
   источников}%
 }
 \newcommand\NormRefs{%нормативные ссылки
@@ -463,10 +463,10 @@
 \def\three@digits#1{\ifnum#1>99\else\ifnum#1>9 0\else00\fi\fi\number#1}
 
 \newcounter{abbrev}%
-\newcommand{\Define}[2]{\nomenclature[X]{#1}{#2.}}%
+\newcommand{\Define}[2]{\nomenclature[X]{~~~~~~~#1}{#2.}}%
 \newcommand{\Abbrev}[2]{%
     \addtocounter{abbrev}{1}%
-    \nomenclature[Y{\three@digits{\value{abbrev}}}]{#1}{#2.}%
+    \nomenclature[Y{\three@digits{\value{abbrev}}}]{~~~~~~~#1}{#2.}%
 }%
 
 \renewcommand\nomname{}%

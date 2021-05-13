@@ -173,7 +173,7 @@
 
 
 % 3.6 Абзацный отступ - 15..17 мм
-\setlength\parindent{15mm}
+\setlength\parindent{12.5mm}
 
 % 4.1.1 - 4.1.6 Деление документа
 
@@ -189,15 +189,21 @@
 
 % Уменьшено --- Seva
 % \newlength\GostAfterTitleSkip    \setlength\GostAfterTitleSkip    {3.2ex}%15mm}
-\newlength\GostAfterTitleSkip    \setlength\GostAfterTitleSkip    {1.2ex}%5mm}
+\newlength\GostAfterTitleSkip    \setlength\GostAfterTitleSkip    {0mm}%5mm}
 
-\newlength\GostBetweenTitleSkip  \setlength\GostBetweenTitleSkip  {1.8ex}%8mm}
+\newlength\GostBetweenTitleSkip  \setlength\GostBetweenTitleSkip  {0mm}%8mm}
+%\newlength\GostAfterTitleSkip    \setlength\GostAfterTitleSkip    {1.2ex}%5mm}
+%
+%\newlength\GostBetweenTitleSkip  \setlength\GostBetweenTitleSkip  {1.8ex}%8mm}
 
 % Увеличено --- Seva
 % \newlength\GostBeforTitleSkip    \setlength\GostBeforTitleSkip    {1.8ex}%\GostAfterTitleSkip}
-\newlength\GostBeforTitleSkip    \setlength\GostBeforTitleSkip    {3.2ex}%\GostAfterTitleSkip}
-\newlength\GostBeforNoTitleSkip  \setlength\GostBeforNoTitleSkip  {1.0ex}
-\newlength\GostHTitleSpace       \setlength\GostHTitleSpace       {2mm}
+\newlength\GostBeforTitleSkip    \setlength\GostBeforTitleSkip    {0mm}%\GostAfterTitleSkip}
+\newlength\GostBeforNoTitleSkip  \setlength\GostBeforNoTitleSkip  {0mm}
+%\newlength\GostBeforTitleSkip    \setlength\GostBeforTitleSkip    {3.2ex}%\GostAfterTitleSkip}
+%\newlength\GostBeforNoTitleSkip  \setlength\GostBeforNoTitleSkip  {1.0ex}
+\newlength\GostHTitleSpace       \setlength\GostHTitleSpace       {0mm}
+%\newlength\GostHTitleSpace       \setlength\GostHTitleSpace       {2mm}
 \newlength\GostTitleIndent       \setlength\GostTitleIndent       {\parindent}
 \newlength\Gost@ChapterIndent    \setlength\Gost@ChapterIndent    {\GostTitleIndent}
 \newlength\Gost@MainChapterIndent\setlength\Gost@MainChapterIndent{\parindent}
@@ -206,8 +212,8 @@
  \addtolength\Gost@TitleDropSkip{-\GostAfterTitleSkip}
 %  стиль всех заголовков, \normalfont оставлен
 \newcommand\GostTitleStyle{\normalfont\bfseries}
-\newcommand\Gost@MainChapterStyle{\large}
-\newcommand\Gost@StructChapterStyle{\large\centering}
+\newcommand\Gost@MainChapterStyle{\Large\bfseries}
+\newcommand\Gost@StructChapterStyle{\Large\bfseries\centering}
 \newcommand\Gost@ChapterStyle{\Gost@MainChapterStyle}
 
 % Part definition
@@ -278,7 +284,8 @@
     \chaptermark{#1}%
     \addtocontents{lof}{\protect\addvspace{10\p@}}%
     \addtocontents{lot}{\protect\addvspace{10\p@}}%
-    \@makechapterhead{#2}%
+    {\@makechapterhead{#2}}%
+    %{\bfseries\Large\@makechapterhead{#2}}%
     \@afterheading
 }
 \newcommand\@makechapterhead[1]{%
@@ -286,14 +293,14 @@
     \ifnum \c@secnumdepth >\m@ne
     \hspace{\Gost@ChapterIndent}\Gost@MainChapterStyle%
         \ifx\@chapapp\@empty%
-            \thechapter\hskip 5\p@%
+            \bfseries\Large\thechapter\hskip 5\p@%
 %
         \else%
-            \@chapapp\space\thechapter\hskip 5\p@%
+            \bfseries\Large\@chapapp\space\thechapter\hskip 5\p@%
         \fi
     \fi
     \interlinepenalty\@M
-    \Gost@ChapterStyle{#1}\par\nobreak
+    \Gost@ChapterStyle{\bfseries\Large#1}\par\nobreak
     \vspace{\GostAfterTitleSkip}
   }}
 \def\@schapter#1{
@@ -303,7 +310,7 @@
 \def\@makeschapterhead#1{%
   {\parindent \z@ \raggedright
     \hspace{\Gost@ChapterIndent}\GostTitleStyle\Gost@ChapterStyle \@chapapp\space 
-    \Gost@ChapterStyle{#1}
+    \Gost@ChapterStyle{\bfseries\Large#1}
     \par
 
   }}
@@ -320,7 +327,7 @@
 \newcommand\section{%
  \@startsection{section}{1}%
  {\GostTitleIndent}{\GostBeforTitleSkip}{\GostAfterTitleSkip}%
- {\GostTitleStyle}%
+ {\bfseries\large}%
 }
 \newcommand*{\asubpart}[2]{\section{#2\label{#1}}}
 
